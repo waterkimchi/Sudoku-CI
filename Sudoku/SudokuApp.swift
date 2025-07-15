@@ -25,7 +25,7 @@ struct SudokuApp: App {
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            GameHomeView()
         }
         .modelContainer(sharedModelContainer)
     }
