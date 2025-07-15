@@ -1,0 +1,71 @@
+//
+//  ContentView.swift
+//  Sudoku
+//
+//  Created by Hyunsu Lim on 7/14/25.
+//
+
+import SwiftUI
+import SwiftData
+
+/// Main view of the Sudoku App
+///
+/// - Parameters:
+///     - x: The *x* component of the vector.
+///     - y: The *y* component of the vector.
+///     - z: The *z* component of the vector.
+///
+/// - Returns:
+///     - a: The *a* component of the vector.
+///
+struct GameHomeView: View {
+    @Environment(\.modelContext) private var modelContext
+    @Query private var items: [Item]
+
+    var body: some View {
+        NavigationSplitView {
+            List {
+                ForEach(items) { item in
+                    NavigationLink {
+                        Text("Item at \(item.timestamp, format: Date.FormatStyle(date: .numeric, time: .standard))")
+                    } label: {
+                        Text(item.timestamp, format: Date.FormatStyle(date: .numeric, time: .standard))
+                    }
+                }
+                .onDelete(perform: deleteItems)
+            }
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    EditButton()
+                }
+                ToolbarItem {
+                    Button(action: addItem) {
+                        Label("Add Item", systemImage: "plus")
+                    }
+                }
+            }
+        } detail: {
+            Text("Select an item")
+        }
+    }
+
+    private func addItem() {
+        withAnimation {
+            let newItem = Item(timestamp: Date())
+            modelContext.insert(newItem)
+        }
+    }
+
+    private func deleteItems(offsets: IndexSet) {
+        withAnimation {
+            for index in offsets {
+                modelContext.delete(items[index])
+            }
+        }
+    }
+}
+
+#Preview {
+    GameHomeView()
+        .modelContainer(for: Item.self, inMemory: true)
+}

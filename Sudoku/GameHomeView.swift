@@ -18,7 +18,7 @@ import SwiftData
 /// - Returns:
 ///     - a: The *a* component of the vector.
 ///
-struct ContentView: View {
+struct GameHomeView: View {
     @Environment(\.modelContext) private var modelContext
     @Query private var items: [Item]
 
@@ -66,6 +66,6 @@ struct ContentView: View {
 }
 
 #Preview {
-    ContentView()
+    GameHomeView()
         .modelContainer(for: Item.self, inMemory: true)
 }
